@@ -78,7 +78,6 @@ WrapperRectangle {
         QsMenuAnchor {
           id: menu
           menu: delegate.modelData.menu
-          onVisibleChanged: QsWindow.window.inhibitGrab = visible
 
           anchor {
             item: trayIcon

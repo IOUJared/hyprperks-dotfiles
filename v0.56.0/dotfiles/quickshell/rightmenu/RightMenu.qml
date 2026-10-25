@@ -16,7 +16,7 @@ WrapperItem {
   property bool powerOpen: false
   property bool updatesOpen: false
 
-  property bool idleInhibitEnabled: false
+  readonly property bool idleInhibitEnabled: S.SystemState.idleInhibitEnabled
 
   implicitWidth: 360 // notifs are 360
 
@@ -50,8 +50,7 @@ WrapperItem {
           description: "Idle Inhibit"
           active: idleInhibitEnabled
           onToggled: () => {
-            idleInhibitEnabled = !idleInhibitEnabled
-            S.SystemState.setHypridleStatus(!idleInhibitEnabled);
+            S.SystemState.setIdleInhibited(!S.SystemState.idleInhibitEnabled);
           }
         }
 
@@ -128,7 +127,7 @@ WrapperItem {
 
            Behavior on color {
               ColorAnimation {
-                duration: 400
+                duration: C.Globals.anim_MEDIUM
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
               }
@@ -173,7 +172,7 @@ WrapperItem {
 
       Behavior on opacity {
         NumberAnimation {
-          duration: 250
+          duration: C.Globals.anim_MEDIUM
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
         }
@@ -184,7 +183,7 @@ WrapperItem {
 
         Behavior on x {
           NumberAnimation {
-            duration: 300
+            duration: C.Globals.anim_MEDIUM
             easing.type: Easing.BezierSpline
             easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
           }
@@ -200,7 +199,7 @@ WrapperItem {
 
       Behavior on opacity {
         NumberAnimation {
-          duration: 250
+          duration: C.Globals.anim_MEDIUM
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
         }
@@ -211,7 +210,7 @@ WrapperItem {
 
         Behavior on x {
           NumberAnimation {
-            duration: 300
+            duration: C.Globals.anim_MEDIUM
             easing.type: Easing.BezierSpline
             easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
           }
@@ -227,7 +226,7 @@ WrapperItem {
 
       Behavior on opacity {
         NumberAnimation {
-          duration: 250
+          duration: C.Globals.anim_MEDIUM
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
         }
@@ -238,7 +237,7 @@ WrapperItem {
 
         Behavior on x {
           NumberAnimation {
-            duration: 300
+            duration: C.Globals.anim_MEDIUM
             easing.type: Easing.BezierSpline
             easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
           }
@@ -251,7 +250,7 @@ WrapperItem {
 
       Behavior on opacity {
         NumberAnimation {
-          duration: 300
+          duration: C.Globals.anim_MEDIUM
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
         }
@@ -296,7 +295,7 @@ WrapperItem {
 
           Behavior on color {
             ColorAnimation {
-              duration: 400
+              duration: C.Globals.anim_MEDIUM
               easing.type: Easing.BezierSpline
               easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
             }
@@ -310,7 +309,7 @@ WrapperItem {
 
       Behavior on opacity {
         NumberAnimation {
-          duration: 300
+          duration: C.Globals.anim_MEDIUM
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
         }
@@ -352,7 +351,7 @@ WrapperItem {
 
           Behavior on color {
             ColorAnimation {
-              duration: 400
+              duration: C.Globals.anim_MEDIUM
               easing.type: Easing.BezierSpline
               easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
             }
@@ -368,7 +367,7 @@ WrapperItem {
         hoverEnabled: true
         onPressed: () => {
           Quickshell.execDetached(["bash", "-c", "~/.config/hyprland-de/scripts/pickWallpaper.sh"]);
-          Quickshell.execDetached(["hyprctl", "dispatch", "global", "hyprland-shell:rightMenuToggle"]); // FIXME: this sucks!!!!
+          Quickshell.execDetached(["hyprctl", "dispatch", 'hl.dsp.global("hyprland-shell:rightMenuToggle")']);
         }
 
         Rectangle {
@@ -383,7 +382,7 @@ WrapperItem {
 
           Behavior on color {
             ColorAnimation {
-              duration: 400
+              duration: C.Globals.anim_MEDIUM
               easing.type: Easing.BezierSpline
               easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
             }
@@ -417,7 +416,7 @@ WrapperItem {
 
           Behavior on color {
             ColorAnimation {
-              duration: 400
+              duration: C.Globals.anim_MEDIUM
               easing.type: Easing.BezierSpline
               easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
             }
@@ -448,7 +447,7 @@ WrapperItem {
 
           Behavior on color {
             ColorAnimation {
-              duration: 400
+              duration: C.Globals.anim_MEDIUM
               easing.type: Easing.BezierSpline
               easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
             }
@@ -462,7 +461,7 @@ WrapperItem {
 
       Behavior on opacity {
         NumberAnimation {
-          duration: 300
+          duration: C.Globals.anim_MEDIUM
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
         }
@@ -503,7 +502,7 @@ WrapperItem {
 
           Behavior on color {
             ColorAnimation {
-              duration: 400
+              duration: C.Globals.anim_MEDIUM
               easing.type: Easing.BezierSpline
               easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
             }

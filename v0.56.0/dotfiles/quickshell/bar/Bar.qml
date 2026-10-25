@@ -21,7 +21,6 @@ PanelWindow {
   readonly property real borderMargin: C.Config.settings.panels.borders ? C.Config.settings.panels.bordersSize : 0
   readonly property real topContentMargin: borderMargin + (C.Config.edge == C.Config.BarEdge.Top ? uncompactState : compactState) * gapsVert
   readonly property real bottomContentMargin: borderMargin + (C.Config.edge == C.Config.BarEdge.Bottom ? uncompactState : compactState) * gapsVert
- // readonly property bool showBattery: (UPower.displayDevice.isLaptopBattery ||  && (!C.Config.settings.bar.battery.hideOnFull ? true : UPower.displayDevice.percentage < 0.99)
   property real compactState: compact ? 1 : 0
   property real uncompactState: 1 - compactState
 
@@ -181,6 +180,7 @@ PanelWindow {
 
   Behavior on compactState {
     SmoothedAnimation {
+      duration: C.Globals.anim_MEDIUM
       velocity: 8
     }
   }
@@ -280,7 +280,6 @@ PanelWindow {
 
     Battery {
       id: battery
-      visible: root.showBattery
     }
 
     Clock {

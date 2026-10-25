@@ -26,7 +26,7 @@ Scope {
   property real revealProgress: 0
   Behavior on revealProgress {
     NumberAnimation {
-      duration: 400
+      duration: C.Globals.anim_MEDIUM
       easing.type: Easing.BezierSpline
       easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
     }

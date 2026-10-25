@@ -24,7 +24,7 @@ WlrLayershell {
     Timer {
         interval: 1000
         repeat: true
-        running: true
+        running: root.show && root.visible
 
         onTriggered: () => {
             // FIXME: this is genuinely atrocious, but qml doesn't render the shape correctly without this nudge?

@@ -8,6 +8,16 @@ import "../state" as S
 
 RowLayout {
   id: root
+  property string statsConsumer: ""
+  readonly property bool statsDemand: C.Config.settings.bar.battery.showSystemStats
+    && (QsWindow.window?.visible ?? false) && S.SystemState.itemVisible(root)
+  onStatsDemandChanged: S.SystemState.setConsumer(statsConsumer, "stats", statsDemand)
+  Component.onCompleted: {
+    statsConsumer = S.SystemState.newConsumer();
+    S.SystemState.setConsumer(statsConsumer, "stats", statsDemand);
+  }
+  Component.onDestruction: S.SystemState.setConsumer(statsConsumer, "stats", false)
+
   property real percentage: UPower.displayDevice.percentage
   property real charging: UPower.displayDevice.state === UPowerDeviceState.Charging
   property color color: (!charging && percentage * 100 < C.Config.settings.bar.battery.low) ? C.Config.theme.error : C.Config.theme.on_background

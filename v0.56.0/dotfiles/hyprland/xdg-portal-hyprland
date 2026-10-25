@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Explicit recovery only: let systemd manage the portal processes.
+# This interrupts active sharing/shortcut sessions; do not run it at every login.
+systemctl --user restart xdg-desktop-portal-hyprland.service xdg-desktop-portal-gtk.service
+systemctl --user restart xdg-desktop-portal.service

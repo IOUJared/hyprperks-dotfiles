@@ -11,6 +11,16 @@ import "../state" as S
 
 WrapperRectangle {
   id: root
+  property string metadataConsumer: ""
+  readonly property bool metadataDemand: (QsWindow.window?.visible ?? false)
+    && S.SystemState.itemVisible(root)
+  onMetadataDemandChanged: S.SystemState.setConsumer(metadataConsumer, "metadata", metadataDemand)
+  Component.onCompleted: {
+    metadataConsumer = S.SystemState.newConsumer();
+    S.SystemState.setConsumer(metadataConsumer, "metadata", metadataDemand);
+  }
+  Component.onDestruction: S.SystemState.setConsumer(metadataConsumer, "metadata", false)
+
   property real avatarSize: 50
   radius: 20
   color: C.Config.applySecondaryOpacity(C.Config.theme.surface_container)

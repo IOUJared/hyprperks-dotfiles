@@ -92,7 +92,7 @@ Rectangle {
 
             Behavior on color {
               ColorAnimation {
-                duration: 400
+                duration: C.Globals.anim_MEDIUM
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
               }
@@ -131,7 +131,7 @@ Rectangle {
 
             Behavior on color {
               ColorAnimation {
-                duration: 400
+                duration: C.Globals.anim_MEDIUM
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
               }
@@ -173,7 +173,7 @@ Rectangle {
 
             Behavior on color {
               ColorAnimation {
-                duration: 400
+                duration: C.Globals.anim_MEDIUM
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
               }
@@ -202,7 +202,7 @@ Rectangle {
 
             Behavior on color {
               ColorAnimation {
-                duration: 400
+                duration: C.Globals.anim_MEDIUM
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
               }
@@ -302,7 +302,7 @@ Rectangle {
 
               Behavior on color {
                 ColorAnimation {
-                  duration: 400
+                  duration: C.Globals.anim_MEDIUM
                   easing.type: Easing.BezierSpline
                   easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
                 }
@@ -332,7 +332,7 @@ Rectangle {
 
               Behavior on color {
                 ColorAnimation {
-                  duration: 400
+                  duration: C.Globals.anim_MEDIUM
                   easing.type: Easing.BezierSpline
                   easing.bezierCurve: C.Globals.anim_CURVE_SMOOTH_SLIDE
                 }

@@ -1,7 +1,9 @@
 import "../config" as C
+import "../state" as S
 import "./settingsSlice" as SL
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Hyprland
 import Quickshell.Widgets
 
 WrapperItem {
@@ -28,7 +30,9 @@ WrapperItem {
       }
 
       SectionButton {
-        icon: "brightness_6"
+        // the menu opens on the screen you clicked, so track the focused one
+        readonly property real level: S.BrightnessState.brightnessOf(Hyprland.focusedMonitor?.name ?? "") / 100
+        icon: S.BrightnessState.iconFor(level)
         section: brightnessSection
       }
 

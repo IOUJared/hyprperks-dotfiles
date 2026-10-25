@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Exact Rosé Pine colors, independent of the current wallpaper.
+exec matugen --mode dark --config "$HOME/.config/matugen/config.toml" json "$HOME/.config/matugen/rose-pine.json"

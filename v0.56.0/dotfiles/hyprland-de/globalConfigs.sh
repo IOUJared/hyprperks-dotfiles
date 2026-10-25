@@ -1,5 +1,3 @@
-#!/bin/bash
-
-. ~/.config/hyprland-de/globalConfigsDefaults.sh
+#!/bin/zsh
 
 HLDE_MATUGEN_CONTRAST=0.0

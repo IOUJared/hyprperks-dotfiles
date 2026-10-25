@@ -103,7 +103,7 @@ PanelWindow {
           properties: "opacity"
           from: 1
           to: 0
-          duration: 100
+          duration: C.Globals.anim_FAST
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_EMPHASIZED_FIRST_HALF
         }
@@ -117,7 +117,7 @@ PanelWindow {
           properties: "opacity"
           from: 0
           to: 1
-          duration: 100
+          duration: C.Globals.anim_FAST
           easing.type: Easing.BezierSpline
           easing.bezierCurve: C.Globals.anim_CURVE_EMPHASIZED_LAST_HALF
         }
@@ -127,8 +127,8 @@ PanelWindow {
     Component {
       id: brightnessOsd
       OsdValue {
-        icon: "brightness_6" // FIXME: dynamic icon based on brightness level
-        value: C.Config.settings.misc.brightnessSplit ? (S.BrightnessState.brightnesses[root.screen.name] / 100) : (S.BrightnessState.overallBrightness / 100)
+        icon: S.BrightnessState.iconFor(value)
+        value: C.Config.misc.brightnessSplit ? (S.BrightnessState.brightnessOf(root.screen.name) / 100) : (S.BrightnessState.overallBrightness / 100)
         displayText: Math.round(value * 100)
       }
     }

@@ -51,7 +51,7 @@ ColumnLayout {
     PowerButton {
       icon: "logout"
       text: "Log out"
-      onClicked: Quickshell.execDetached(["hyprctl", "dispatch", "exit"])
+      onClicked: Quickshell.execDetached(["uwsm", "stop"])
       Layout.fillWidth: true
     }
 
@@ -66,7 +66,7 @@ ColumnLayout {
   PowerButton {
     icon: "lock"
     text: "Lock"
-    onClicked: Quickshell.execDetached(["hyprlock"])
+    onClicked: Quickshell.execDetached(["hyprlock", "--config", "/home/jared/.config/hypr/hyprlock-custom.conf"])
     Layout.fillWidth: true
   }
 

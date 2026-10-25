@@ -1,1 +1,2 @@
-@import 'matugen.css';
+/* Libadwaita-compatible user colors/widgets, without replacing its base layout. */
+@import url("file:///home/jared/.local/share/themes/RosePine-Custom/gtk-4.0/overrides.css");

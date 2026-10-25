@@ -16,10 +16,10 @@
 -- hl.env("HLDE_HYPRLOCK_12H", "1")
 
 -- Enable custom hyprlock (requires Hyprland restart, config will be ~/.config/hypr/hyprlock-custom.conf)
--- hl.env("HLDE_HYPRLOCK_CUSTOM", "1")
+hl.env("HLDE_HYPRLOCK_CUSTOM", "1")
 
 -- Enable custom hypridle (requires Hyprland restart, config will be ~/.config/hypr/hypridle-custom.conf)
--- hl.env("HLDE_HYPRIDLE_CUSTOM", "1")
+hl.env("HLDE_HYPRIDLE_CUSTOM", "1")
 
 -- Disable autolaunching hyprpaper (requires Hyprland restart)
 -- hl.env("HLDE_NO_HYPRPAPER", "1")

@@ -1,0 +1,38 @@
+/* Exact standard Rosé Pine colors for modern libadwaita applications. */
+:root {
+    --accent-color: #ebbcba;
+    --accent-bg-color: #ebbcba;
+    --accent-fg-color: #191724;
+    --window-bg-color: #191724;
+    --window-fg-color: #e0def4;
+    --view-bg-color: #191724;
+    --view-fg-color: #e0def4;
+    --headerbar-bg-color: #1f1d2e;
+    --headerbar-fg-color: #e0def4;
+    --headerbar-backdrop-color: #191724;
+    --headerbar-border-color: #403d52;
+    --card-bg-color: #1f1d2e;
+    --card-fg-color: #e0def4;
+    --popover-bg-color: #26233a;
+    --popover-fg-color: #e0def4;
+    --dialog-bg-color: #1f1d2e;
+    --dialog-fg-color: #e0def4;
+    --sidebar-bg-color: #1f1d2e;
+    --sidebar-fg-color: #e0def4;
+    --sidebar-backdrop-color: #191724;
+    --sidebar-border-color: #403d52;
+    --secondary-sidebar-bg-color: #26233a;
+    --secondary-sidebar-fg-color: #e0def4;
+    --destructive-color: #eb6f92;
+    --destructive-bg-color: #eb6f92;
+    --destructive-fg-color: #191724;
+    --error-color: #eb6f92;
+    --error-bg-color: #eb6f92;
+    --error-fg-color: #191724;
+    --warning-color: #f6c177;
+    --warning-bg-color: #f6c177;
+    --warning-fg-color: #191724;
+    --success-color: #9ccfd8;
+    --success-bg-color: #31748f;
+    --success-fg-color: #e0def4;
+}

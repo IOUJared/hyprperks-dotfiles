@@ -1,1 +1,2 @@
-@import 'matugen.css';
+/* Custom fixed Rosé Pine widget styling; no generated Material/Numix overrides. */
+@import url("file:///home/jared/.local/share/themes/RosePine-Custom/gtk-3.0/overrides.css");

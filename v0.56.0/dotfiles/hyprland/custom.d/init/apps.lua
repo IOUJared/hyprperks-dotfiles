@@ -1,8 +1,12 @@
--- This file controls a few of your default apps.
--- You can add more and use them in custom binds.
+HLDE = HLDE or {}
+HLDE.apps = HLDE.apps or {}
 
--- HLDE.apps.terminal = "kitty"
--- HLDE.apps.fileManager = "dolphin"
--- HLDE.apps.menu = "walker -t hypr"
--- HLDE.apps.lockscreen = "hyprlock"
--- HLDE.apps.screenshot = "grimblast copysave area --freeze --notify"
+HLDE.mainMod = HLDE.mainMod or "SUPER"
+
+HLDE.apps.terminal = "uwsm app -- alacritty"
+HLDE.apps.browser = "uwsm app -- zen-browser"
+HLDE.apps.fileManager = "uwsm app -- thunar"
+HLDE.apps.menu = "hyprlauncher --toggle"
+HLDE.apps.lockscreen = "hyprlock --config /home/jared/.config/hypr/hyprlock-custom.conf"
+HLDE.apps.hyprshot = "uwsm app -- hyprshot"
+HLDE.apps.screenshot = HLDE.apps.hyprshot .. " -m region --freeze"

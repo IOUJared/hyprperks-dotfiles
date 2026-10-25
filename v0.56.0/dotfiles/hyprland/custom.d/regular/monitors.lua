@@ -1,11 +1,19 @@
--- Set your monitors up if you need a different mode than the default chosen.
+hl.monitor({
+    output = "DP-2",
+    mode = "2560x1440@239.97",
+    position = "0x0",
+    scale = 1,
+    supports_hdr = -1,
+    vrr = 0,
+})
 
--- Example:
--- hl.monitor({
---     output = "DP-2",
---     mode = "3840x2160@144",
---     position = "auto-right",
---     scale = "auto",
--- })
-
--- If you need to find the name, or mode, execute `hyprctl monitors all` in the terminal.
+hl.monitor({
+    output = "DP-1",
+    mode = "2560x1440@540.19",
+    position = "2560x0",
+    scale = 1,
+    bitdepth = 10,
+    cm = "auto",
+    supports_hdr = 0,
+    vrr = 0,
+})

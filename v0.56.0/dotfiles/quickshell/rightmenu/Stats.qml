@@ -8,6 +8,15 @@ import "../state" as S
 
 ColumnLayout {
   id: root
+  property string statsConsumer: ""
+  readonly property bool statsDemand: (QsWindow.window?.visible ?? false)
+    && S.SystemState.itemVisible(root)
+  onStatsDemandChanged: S.SystemState.setConsumer(statsConsumer, "stats", statsDemand)
+  Component.onCompleted: {
+    statsConsumer = S.SystemState.newConsumer();
+    S.SystemState.setConsumer(statsConsumer, "stats", statsDemand);
+  }
+  Component.onDestruction: S.SystemState.setConsumer(statsConsumer, "stats", false)
 
   spacing: 10
 
