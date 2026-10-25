@@ -95,10 +95,25 @@ check_themes() {
     assert_file "$cfg/Kvantum/rose-pine-rose/rose-pine-rose.kvconfig"
     assert_file "$cfg/Kvantum/rose-pine-pine/rose-pine-pine.kvconfig"
     assert_contains "$cfg/Kvantum/kvantum.kvconfig" "theme=rose-pine-rose"
+    assert_contains "$cfg/qt6ct/qt6ct.conf" "icon_theme=rose-pine-icons"
     assert_file "$cfg/hyprland-de/scripts/apply-rose-pine"
     assert_exec "$cfg/hyprland-de/scripts/apply-rose-pine"
     assert_absent "$cfg/walker"
     assert_absent "$cfg/wallust"
+}
+
+check_environment() {
+    local cfg=$1
+    assert_file "$HOME/.config/uwsm/env"
+    assert_contains "$HOME/.config/uwsm/env" "QT_QPA_PLATFORMTHEME=hyprqt6engine"
+    assert_exec "$HOME/.local/bin/desktop-stats-sample"
+    assert_exec "$HOME/.local/bin/chromium-local"
+    for game in warframe-game.lua aion2-game-content.lua rocketleague-display.lua; do
+        assert_contains "$cfg/hypr/custom.d/regular/$game" "float = false"
+    done
+    if grep -q 'QT_QPA_PLATFORMTHEME=qt6ct' "$dotfiles_dir/setup.sh"; then
+        fail "setup.sh still writes the qt6ct platform theme"
+    fi
 }
 
 check_wallpaper() {
@@ -134,6 +149,7 @@ main() {
     check_hyprland "$cfg"
     check_kitty "$cfg"
     check_themes "$cfg"
+    check_environment "$cfg"
     check_wallpaper "$cfg"
     check_gsettings
 

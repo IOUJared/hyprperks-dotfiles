@@ -16,6 +16,10 @@ upstream.
   menu, and ordered session shutdown with `uwsm stop`.
 - Custom `hyprlock`/`hypridle` configs, monitor layout, workspace/bind set, and
   per-game window rules and autostart hooks under `hyprland/custom.d/`.
+- Proton/Steam games stay tiled when Hyprland sees them as XWayland clients; the
+  generic XWayland float rule no longer captures them.
+- UWSM environment (`uwsm/env`) and the helper scripts used by the shell are tracked
+  here, and the Qt platform theme is consistently `hyprqt6engine`.
 - Quickshell, kitty, GTK, Qt and Kvantum updates for the Rosé Pine theme, with the
   Quickshell icon theme pinned and per-app icons in the volume mixer.
 
@@ -27,10 +31,11 @@ cd v0.56.0/dotfiles
 ```
 
 `setup.sh` installs the file set of this fork: Hyprland (including `custom.d/`,
-`scheme/`, `script/`, `sounds/`), quickshell, matugen, kitty, GTK, Qt/Kvantum and the
-`hyprland-de` scripts, and points the gsettings themes at Bibata/Rosé Pine. It
-overwrites the files it manages, including `kitty.conf` and the GTK configs, and
-installs only the file set in this repository.
+`scheme/`, `script/`, `sounds/`), quickshell, matugen, kitty, GTK, Qt/Kvantum,
+`uwsm/env`, the `hyprland-de` scripts and the `~/.local/bin` helpers, and points the
+gsettings/Qt themes at Bibata/Rosé Pine. It overwrites the files it manages, including
+`kitty.conf`, the GTK configs and `~/.config/uwsm/env`, and sets
+`QT_QPA_PLATFORMTHEME=hyprqt6engine` in `/etc/environment` (needs sudo).
 
 ### Local prerequisites
 
@@ -41,6 +46,8 @@ external pieces, which are not stored in this repo:
   `gtk-3.0/assets` symlink targets `/usr/share/themes/rose-pine-gtk/assets`
 - `Bibata-Modern-Classic` cursors and `rose-pine-icons`
 - the `Lato` font
+- the `hyprqt6engine` Qt platform theme (`qt6ct` is kept as a fallback config)
+- a Playwright Chromium cache if `chromium-local` is used for `CHROME_EXECUTABLE`
 - a wallpaper at `~/Pictures/Wallpapers/mountain.png`
 - `~/avatar.jpg` for the lock screen
 
@@ -62,6 +69,14 @@ mixer's fallback icon resolves:
 ```sh
 cd v0.56.0/dotfiles
 ./tests/quickshell_icon_test.sh
+```
+
+The XWayland rule test launches a short-lived X11 window with a Steam app id and
+asserts it stays tiled. It needs a running Hyprland and PyGObject, and skips otherwise:
+
+```sh
+cd v0.56.0/dotfiles
+./tests/xwayland_float_test.sh
 ```
 
 ### Updating from upstream

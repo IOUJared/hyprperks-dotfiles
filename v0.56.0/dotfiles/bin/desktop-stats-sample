@@ -1,0 +1,169 @@
+#!/usr/bin/python3
+"""One-shot local counters; no subprocesses, sockets, connection tables or daemon.
+
+Rate calculation belongs to the QML consumer's nonpersistent previous snapshot.
+Only interface names/indexes and byte totals leave routing/sysfs reads; routing
+addresses are not returned. A one-second self deadline complements the QML guard.
+"""
+import argparse
+import json
+import math
+import os
+from pathlib import Path
+import pwd
+import re
+import signal
+import socket
+import time
+
+
+class Reader:
+    def __init__(self, proc=Path('/proc'), sys=Path('/sys')):
+        self.proc, self.sys = Path(proc), Path(sys)
+
+    @staticmethod
+    def text(path):
+        with path.open(encoding='utf-8') as stream:
+            return stream.read(131073)[:131072]
+
+    def cpu(self):
+        text = self.text(self.proc / 'stat')
+        fields = next(line.split()[1:] for line in text.splitlines() if line.startswith('cpu '))
+        values = [int(v) for v in fields[:8]]  # guest ticks already included in user/nice
+        if len(values) != 8 or min(values) < 0:
+            raise ValueError('invalid aggregate CPU counters')
+        return {'total': sum(values), 'idle': values[3] + values[4],
+                'count': sum(bool(re.match(r'^cpu\d+\s', line)) for line in text.splitlines())}
+
+    def memory(self):
+        fields = dict(re.findall(r'^(\w+):\s+(\d+)\s+kB$', self.text(self.proc / 'meminfo'), re.M))
+        total, available = int(fields['MemTotal']), int(fields['MemAvailable'])
+        if total <= 0 or not 0 <= available <= total:
+            raise ValueError('invalid memory counters')
+        return math.floor(100 * (total - available) / total)
+
+    def default_interfaces(self):
+        interfaces = set()
+        # Route tables are not connection tables. Do not collect addresses or endpoints.
+        try:
+            for line in self.text(self.proc / 'net/route').splitlines()[1:]:
+                parts = line.split()
+                if len(parts) >= 8 and parts[1] == '00000000' and parts[7] == '00000000' and int(parts[3], 16) & 1:
+                    interfaces.add(parts[0])
+        except (OSError, ValueError):
+            pass
+        try:
+            for line in self.text(self.proc / 'net/ipv6_route').splitlines():
+                parts = line.split()
+                if len(parts) >= 10 and parts[0] == '0' * 32 and parts[1] == '00' and int(parts[8], 16) & 1:
+                    interfaces.add(parts[-1])
+        except (OSError, ValueError):
+            pass
+        return interfaces
+
+    def network(self):
+        base = self.sys / 'class/net'
+        devices = []
+        for device in sorted(base.iterdir()):
+            # A real device link excludes lo, tun/docker/veth/bridges; never sum a
+            # logical interface together with its physical transport underneath.
+            if not (device / 'device').exists():
+                continue
+            if self.text(device / 'operstate').strip() != 'up':
+                continue
+            try:
+                if self.text(device / 'carrier').strip() != '1':
+                    continue
+            except FileNotFoundError:
+                pass  # some physical drivers provide operstate but no carrier
+            devices.append(device)
+        preferred = self.default_interfaces()
+        routed = [device for device in devices if device.name in preferred]
+        selected = routed or devices  # VPN/bond/bridge route: physical transports only
+        result = {}
+        for device in selected:
+            counters = {key: int(self.text(device / field).strip()) for key, field in
+                        [('index', 'ifindex'), ('rx', 'statistics/rx_bytes'), ('tx', 'statistics/tx_bytes')]}
+            if counters['index'] <= 0 or min(counters['rx'], counters['tx']) < 0:
+                raise ValueError('invalid interface counters')
+            result[device.name] = counters
+        return result
+
+    def temperature(self):
+        temperatures = []
+        for sensor in sorted((self.sys / 'class/hwmon').glob('hwmon*')):
+            try:
+                driver = self.text(sensor / 'name').strip()
+            except OSError:
+                continue
+            if driver not in ('k10temp', 'coretemp', 'zenpower'):
+                continue
+            for label in sorted(sensor.glob('temp*_label')):
+                try:
+                    name = self.text(label).strip()
+                    if name != 'Tctl' and not re.fullmatch(r'Core \d+', name):
+                        continue
+                    value = int(self.text(label.with_name(label.name.replace('_label', '_input')))) / 1000
+                    if -40 <= value <= 150:
+                        temperatures.append(value)
+                except (OSError, ValueError):
+                    continue
+        return max(temperatures) if temperatures else None
+
+    def uptime(self):
+        seconds = float(self.text(self.proc / 'uptime').split()[0])
+        if not math.isfinite(seconds) or seconds < 0:
+            raise ValueError('invalid uptime')
+        minutes = int(seconds // 60)
+        pieces = []
+        for amount, unit in [(minutes // 525600, 'year'), (minutes % 525600 // 10080, 'week'),
+                             (minutes % 10080 // 1440, 'day'), (minutes % 1440 // 60, 'hour'),
+                             (minutes % 60, 'minute')]:
+            if amount:
+                pieces.append(f'{amount} {unit}{"s" if amount != 1 else ""}')
+        return 'up ' + (', '.join(pieces) if pieces else '0 minutes')
+
+
+def optional(callback):
+    try:
+        return callback()
+    except (OSError, ValueError, KeyError, StopIteration, OverflowError):
+        return None
+
+
+def collect(reader, metadata_only=False, clock=None, hostname=None, username=None):
+    sample = {'version': 1, 'mono': (clock or time.monotonic)(),
+              'host': optional(hostname or socket.gethostname),
+              'username': optional(username or (lambda: pwd.getpwuid(os.getuid()).pw_name)),
+              'uptime': optional(reader.uptime)}
+    if not metadata_only:
+        sample.update(cpu=optional(reader.cpu), ram=optional(reader.memory),
+                      network=optional(reader.network), temp=optional(reader.temperature))
+    return sample
+
+
+class SampleDeadline(RuntimeError):
+    pass
+
+
+def deadline(_signal, _frame):
+    raise SampleDeadline('sample read deadline')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--metadata-only', action='store_true')
+    args = parser.parse_args()
+    signal.signal(signal.SIGALRM, deadline)
+    signal.setitimer(signal.ITIMER_REAL, 1.0)
+    try:
+        print(json.dumps(collect(Reader(), args.metadata_only), separators=(',', ':'), allow_nan=False))
+        return 0
+    except (SampleDeadline, ValueError, OSError):
+        return 1  # no partial stdout on deadline/schema failure
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

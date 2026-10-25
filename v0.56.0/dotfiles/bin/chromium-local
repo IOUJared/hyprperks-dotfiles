@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""Launch the newest installed full Chromium build from Playwright's cache."""
+import os
+from pathlib import Path
+import re
+import sys
+
+cache = Path(os.environ.get('XDG_CACHE_HOME', str(Path.home() / '.cache'))) / 'ms-playwright'
+candidates = []
+for folder in cache.glob('chromium-*'):
+    match = re.fullmatch(r'chromium-(\d+)', folder.name)
+    if not match:
+        continue
+    for layout in ('chrome-linux64', 'chrome-linux'):
+        wrapper = folder / layout / 'chrome-wrapper'
+        if wrapper.is_file() and os.access(wrapper, os.X_OK):
+            candidates.append((int(match[1]), wrapper))
+            break
+if not candidates:
+    sys.exit(f'chromium-local: no executable Chromium build in {cache}')
+selected = max(candidates, key=lambda item: item[0])[1]
+os.execv(str(selected), [str(selected), *sys.argv[1:]])

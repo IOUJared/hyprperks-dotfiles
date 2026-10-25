@@ -70,6 +70,15 @@ hl.window_rule({
     no_blur = true,
 })
 
+-- Proton games are XWayland clients. Keep Steam games tiled despite the
+-- generic XWayland rule above; this must stay after it because custom.d
+-- files load in directory order and would otherwise race the per-game rules.
+hl.window_rule({
+    name = "steam-games-tiled",
+    match = { class = "^steam_app_[0-9]+$" },
+    float = false,
+})
+
 for _, entry in ipairs({
     {
         name = "float-center-large",

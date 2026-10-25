@@ -15,6 +15,7 @@ hl.window_rule({
 hl.window_rule({
     name = "warframe-game-baseline",
     match = { class = warframe },
+    float = false,            -- Proton runs through XWayland; keep it tiled
     no_anim = true,
     no_blur = true,
     opaque = true,

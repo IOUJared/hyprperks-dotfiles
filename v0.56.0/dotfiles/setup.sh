@@ -21,6 +21,14 @@ fi
 mkdir -p ~/.config/matugen
 cp -r ./matugen/* ~/.config/matugen/
 
+# setup uwsm environment (Qt platform theme, Wayland flags, XDG dirs)
+mkdir -p ~/.config/uwsm
+cp ./uwsm/env ~/.config/uwsm/env
+
+# setup helper scripts used by the shell
+mkdir -p ~/.local/bin
+install -m 755 ./bin/desktop-stats-sample ./bin/chromium-local ~/.local/bin/
+
 # setup image
 if [ ! -f ~/avatar.jpg ]; then
   cp ./anon.jpg ~/avatar.jpg
@@ -77,9 +85,9 @@ if [[ ! -v HLDE_NOSUDO ]]; then
     echo "HLDE_NOSUDO not present, installing global things..."
 
     if grep -q QT_QPA_PLATFORMTHEME "/etc/environment"; then
-        $SUBIN sed -i -e 's/QT_QPA_PLATFORMTHEME\=.*/QT_QPA_PLATFORMTHEME\=qt6ct/g' /etc/environment
+        $SUBIN sed -i -e 's/QT_QPA_PLATFORMTHEME\=.*/QT_QPA_PLATFORMTHEME\=hyprqt6engine/g' /etc/environment
     else
-        echo QT_QPA_PLATFORMTHEME=qt6ct | $SUBIN tee -a /etc/environment
+        echo QT_QPA_PLATFORMTHEME=hyprqt6engine | $SUBIN tee -a /etc/environment
     fi
 
     # Enable system services
