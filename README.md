@@ -6,12 +6,14 @@ based on the `v0.56.0` snapshot, carrying my personal changes.
 ### Changes in this fork
 
 All changes live under `v0.56.0/dotfiles/` so they stay diffable against upstream.
+Only the `v0.56.0` snapshot is kept; earlier snapshots are still available from
+upstream.
 
 - Fixed Rosé Pine palette instead of wallpaper-derived colors: `scripts/apply-rose-pine`
   runs matugen against `matugen/rose-pine.json`, and `scripts/wallpaper.sh` only sets
   the wallpaper.
-- UWSM-managed apps (`alacritty`, `zen-browser`, `thunar`), `hyprlauncher` instead of
-  walker, and ordered session shutdown with `uwsm stop`.
+- UWSM-managed apps (`alacritty`, `zen-browser`, `thunar`), `hyprlauncher` for the app
+  menu, and ordered session shutdown with `uwsm stop`.
 - Custom `hyprlock`/`hypridle` configs, monitor layout, workspace/bind set, and
   per-game window rules and autostart hooks under `hyprland/custom.d/`.
 - Quickshell, kitty, GTK, Qt and Kvantum updates for the Rosé Pine theme.
@@ -26,8 +28,8 @@ cd v0.56.0/dotfiles
 `setup.sh` installs the file set of this fork: Hyprland (including `custom.d/`,
 `scheme/`, `script/`, `sounds/`), quickshell, matugen, kitty, GTK, Qt/Kvantum and the
 `hyprland-de` scripts, and points the gsettings themes at Bibata/Rosé Pine. It
-overwrites the files it manages, including `kitty.conf` and the GTK configs, and it no
-longer installs walker or wallust.
+overwrites the files it manages, including `kitty.conf` and the GTK configs, and
+installs only the file set in this repository.
 
 ### Local prerequisites
 
@@ -40,9 +42,6 @@ external pieces, which are not stored in this repo:
 - the `Lato` font
 - a wallpaper at `~/Pictures/Wallpapers/mountain.png`
 - `~/avatar.jpg` for the lock screen
-
-The `third-party/` tree is kept from upstream for reference only; this setup uses the
-icon, cursor and GTK themes installed by the packages above.
 
 ### Tests
 
@@ -76,7 +75,7 @@ Thank you to End-4 and Outfoxxed for helping with initial work on these dotfiles
 
 ## Licensing
 
-All dotfiles are released under MIT. Themes included under `third-party/` are copies from their original sources, and may be licensed under different
-conditions.
+All dotfiles are released under MIT. External themes, icons and fonts are installed
+separately and keep their own licenses.
 
 

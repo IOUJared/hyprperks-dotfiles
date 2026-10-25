@@ -20,13 +20,6 @@ hl.window_rule({
 })
 
 hl.layer_rule({
-    name = "walker-blur",
-    match = { namespace = "walker" },
-    blur = true,
-    ignore_alpha = 0.41,
-})
-
-hl.layer_rule({
     name = "shell-bar-blur",
     match = { namespace = "hyprland-shell:bar" },
     blur = true,

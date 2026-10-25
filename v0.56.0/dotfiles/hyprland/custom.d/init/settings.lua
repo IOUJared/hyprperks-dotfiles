@@ -1,8 +1,5 @@
 -- These are some settings you can set to alter the behavior of the dotfiles.
 
--- Disable autolaunching walker's service
--- hl.env("HLDE_NO_WALKER", "1")
-
 -- Disable autolaunching hypridle
 -- hl.env("HLDE_NO_HYPRIDLE", "1")
 
