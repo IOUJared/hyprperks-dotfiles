@@ -119,9 +119,9 @@ CategoryBlueprint {
                     label: "Exclude players"
                     value: C.Config.asMonitorString(C.Config.settings.mpris.excludedPlayers)
                     onChanged: (x) => {
-                        let arr = fromCommaList(x);
-                        if (arr == [])
-                            return ;
+                        let arr = C.Config.fromCommaList(x);
+                        if (arr.length == 0)
+                            return;
 
                         C.Config.settings.mpris.excludedPlayers = arr;
                     }
@@ -150,9 +150,9 @@ CategoryBlueprint {
                     label: "Include players"
                     value: C.Config.asMonitorString(C.Config.settings.mpris.includedPlayers)
                     onChanged: (x) => {
-                        let arr = fromCommaList(x);
-                        if (arr == [])
-                            return ;
+                        let arr = C.Config.fromCommaList(x);
+                        if (arr.length == 0)
+                            return;
 
                         C.Config.settings.mpris.includedPlayers = arr;
                     }

@@ -22,6 +22,8 @@ upstream.
   here, and the Qt platform theme is consistently `hyprqt6engine`.
 - Quickshell, kitty, GTK, Qt and Kvantum updates for the Rosé Pine theme, with the
   Quickshell icon theme pinned and per-app icons in the volume mixer.
+- The bar is pinned to DP-1, and the monitor/MPRIS text settings now commit correctly
+  instead of throwing `fromCommaList is not defined`.
 
 ### Installing
 
@@ -77,6 +79,13 @@ asserts it stays tiled. It needs a running Hyprland and PyGObject, and skips oth
 ```sh
 cd v0.56.0/dotfiles
 ./tests/xwayland_float_test.sh
+```
+
+The settings test guards the monitor/MPRIS text fields and the DP-1 bar default:
+
+```sh
+cd v0.56.0/dotfiles
+./tests/quickshell_settings_test.sh
 ```
 
 ### Updating from upstream

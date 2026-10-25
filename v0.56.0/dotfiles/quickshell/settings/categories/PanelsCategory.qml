@@ -233,9 +233,9 @@ CategoryBlueprint {
                     label: "Don't show widgets on"
                     value: C.Config.asMonitorString(C.Config.settings.panels.excludedMonitors)
                     onChanged: (x) => {
-                        let arr = fromCommaList(x);
-                        if (arr == [])
-                            return ;
+                        let arr = C.Config.fromCommaList(x);
+                        if (arr.length == 0)
+                            return;
 
                         C.Config.settings.panels.excludedMonitors = arr;
                     }
@@ -264,9 +264,9 @@ CategoryBlueprint {
                     label: "Show widgets on"
                     value: C.Config.asMonitorString(C.Config.settings.panels.includedMonitors)
                     onChanged: (x) => {
-                        let arr = fromCommaList(x);
-                        if (arr == [])
-                            return ;
+                        let arr = C.Config.fromCommaList(x);
+                        if (arr.length == 0)
+                            return;
 
                         C.Config.settings.panels.includedMonitors = arr;
                     }

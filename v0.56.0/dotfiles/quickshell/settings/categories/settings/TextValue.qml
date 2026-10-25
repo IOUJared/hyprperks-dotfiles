@@ -53,23 +53,23 @@ RowLayout {
         }
 
         Keys.onPressed: (event) => {
-          // FIXME: why does this not work by default? TextEdit should do it...
-          if (event.key == Qt.Key_Left && te.cursorPosition > 0)
+          // TextEdit does not handle these itself here, so consume each key we do handle.
+          if (event.key == Qt.Key_Left && te.cursorPosition > 0) {
             te.cursorPosition--;
-          if (event.key == Qt.Key_Right && te.cursorPosition < te.text.length)
+            event.accepted = true;
+          } else if (event.key == Qt.Key_Right && te.cursorPosition < te.text.length) {
             te.cursorPosition++;
-          if (event.key == Qt.Key_Delete && te.text.length > 0 && te.cursorPosition < te.text.length) {
+            event.accepted = true;
+          } else if (event.key == Qt.Key_Delete && te.text.length > 0 && te.cursorPosition < te.text.length) {
             const curpos = te.cursorPosition;
             te.text = te.text.substr(0, te.cursorPosition) + te.text.substr(te.cursorPosition + 1, te.text.length - te.cursorPosition - 1);
             te.cursorPosition = curpos;
-          }
-
-          if (event.key == Qt.Key_Return) {
+            event.accepted = true;
+          } else if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
             onChanged(te.text);
             te.deselect();
+            event.accepted = true;
           }
-
-          event.accepted = false;
         }
 
         anchors {

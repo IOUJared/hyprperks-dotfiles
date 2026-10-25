@@ -21,6 +21,10 @@ Singleton {
     return mons.join(",");
   }
 
+  function fromCommaList(str) {
+    return String(str).split(",").map(s => s.trim()).filter(s => s.length > 0);
+  }
+
   function epochSecondsToHuman(sec) {
     if (sec < 10)
       return "None";
@@ -288,9 +292,9 @@ Singleton {
         property bool transparent: true
         property real baseOpacity: 0.8
         property bool compactEnabled: true
-        property int monitorChoiceMode: 0 // 0 - exclude, 1 - include
-        property list<string> excludedMonitors: ["DP-7, HDMI-A-4"]
-        property list<string> includedMonitors: ["0, DP-1, eDP-1, HDMI-A-1"]
+        property int monitorChoiceMode: 1 // 0 - exclude, 1 - include
+        property list<string> excludedMonitors: ["DP-7", "HDMI-A-4"]
+        property list<string> includedMonitors: ["DP-1"]
       }
       property JsonObject tray: JsonObject {
         property bool monochromeIcons: false
