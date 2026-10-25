@@ -1,7 +1,0 @@
-backend = "resized"
-threshold = 10
-palette = "dark"
-
-[templates]
-kitty.template = 'kitty-template.conf'
-kitty.target = '~/.config/kitty/wallust.conf'

@@ -17,10 +17,6 @@ else
     exit 1
 fi
 
-# setup wallust
-mkdir -p ~/.config/wallust
-cp -r ./wallust/* ~/.config/wallust/
-
 # setup matugen
 mkdir -p ~/.config/matugen
 cp -r ./matugen/* ~/.config/matugen/
@@ -34,14 +30,11 @@ fi
 mkdir -p ~/.config/hypr
 rm -rf ~/.config/hypr/conf.d
 rm -f ~/.config/hypr/hyprland.conf
-cp ./hyprland/hyprland.lua ~/.config/hypr
-cp ./hyprland/hyprpaper.conf ~/.config/hypr
-cp ./hyprland/hyprlock.conf ~/.config/hypr
-cp ./hyprland/hyprlock-de.conf ~/.config/hypr
-cp ./hyprland/hypridle.conf ~/.config/hypr
-cp ./hyprland/hypridle-de.conf ~/.config/hypr
-cp -r ./hyprland/conf.d ~/.config/hypr
-cp -r ./hyprland/assets ~/.config/hypr
+cp ./hyprland/*.conf ./hyprland/*.lua ./hyprland/*.toml ./hyprland/.luarc.json \
+    ./hyprland/xdg-portal-hyprland ~/.config/hypr/
+cp -r ./hyprland/conf.d ./hyprland/assets ./hyprland/scheme \
+    ./hyprland/script ./hyprland/sounds ~/.config/hypr/
+chmod +x ~/.config/hypr/xdg-portal-hyprland ~/.config/hypr/script/*.sh
 
 if [ ! -d ~/.config/hypr/custom.d ]; then
     cp -r ./hyprland/custom.d ~/.config/hypr
@@ -57,33 +50,23 @@ else
     done
 fi
 
-# setup cursor themes
-mkdir -p ~/.icons/
-cp -r ./third-party/xcursor-pro-dark/XCursor-Pro-Dark ~/.icons
-cp -r ./third-party/xcursor-pro-hyprcursor/XCursor-Pro-Dark-Hyprcursor ~/.icons
-gsettings set org.gnome.desktop.interface cursor-theme 'XCursor-Pro-Dark'
-gsettings set org.gnome.desktop.interface cursor-size '24'
+# setup cursors; Bibata is an external dependency, see README
+gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
+gsettings set org.gnome.desktop.interface cursor-size '20'
 
 # setup kitty
-mkdir -p ~/.config/kitty
-cp ./kitty/hl.conf ~/.config/kitty
-if [ ! -f ~/.config/kitty/kitty.conf ]; then
-    echo -ne "include ./hl.conf\n# You can add your own configuration options for kitty below. They will not be overwritten.\n\n" > ~/.config/kitty/kitty.conf
-else
-    cat ~/.config/kitty/kitty.conf | grep "hl.conf" || echo -ne "\ninclude ./hl.conf" >> ~/.config/kitty/kitty.conf
-fi
-
-# setup walker
-mkdir -p ~/.config/walker
-cp -r ./walker/* ~/.config/walker/
+mkdir -p ~/.config/kitty/themes
+cp ./kitty/hl.conf ./kitty/kitty.conf ./kitty/current-theme.conf \
+    ./kitty/matugen.conf ~/.config/kitty/
+cp -r ./kitty/themes/* ~/.config/kitty/themes/
 
 # setup quickshell
 mkdir -p ~/.config/quickshell
 cp -r ./quickshell/* ~/.config/quickshell/
 
-# setup qt6 theme
-mkdir -p ~/.config/Kvantum/
-cp -r ./third-party/fluent-kde/Kvantum/* ~/.config
+# setup Qt/Kvantum theme
+mkdir -p ~/.config/Kvantum
+cp -r ./kvantum/rose-pine-pine ./kvantum/rose-pine-rose ~/.config/Kvantum/
 cp ./kvantum/kvantum.kvconfig ~/.config/Kvantum/
 mkdir -p ~/.config/qt6ct
 cp -r ./qt6ct/* ~/.config/qt6ct/
@@ -99,10 +82,6 @@ if [[ ! -v HLDE_NOSUDO ]]; then
         echo QT_QPA_PLATFORMTHEME=qt6ct | $SUBIN tee -a /etc/environment
     fi
 
-    # setup icon theme
-    $SUBIN mkdir -p /usr/share/icons
-    $SUBIN cp -r ./third-party/papirus/Papirus-Dark/ /usr/share/icons
-
     # Enable system services
     $SUBIN systemctl enable NetworkManager
     $SUBIN systemctl enable bluetooth
@@ -110,14 +89,14 @@ else
     echo "HLDE_NOSUDO present, not installing global things..."
 fi
 
-gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+gsettings set org.gnome.desktop.interface icon-theme 'rose-pine-icons'
 
 # setup gtk theme
 mkdir -p ~/.config/gtk-3.0
 mkdir -p ~/.config/gtk-4.0
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'RosePine-Custom'
 
 rm -rf ~/.config/gtk-3.0/*
 rm -rf ~/.config/gtk-4.0/*
@@ -137,19 +116,15 @@ cp ./codium-flags.conf ~/.config
 cp ./electron-flags.conf ~/.config
 cp ./spotify-flags.conf ~/.config
 
-# fix plasma menus
-mkdir -p ~/.config/menus
-cp ./kde/applications.menu ~/.config/menus
-kbuildsycoca6
-
-# enable hyprpolkitagent
-systemctl --user enable hyprpolkitagent
-
 # setup hyprland-de config dir
 mkdir -p ~/.config/hyprland-de
 
 if [ ! -f ~/.config/hyprland-de/wallpaper.conf ]; then
-    echo "$(realpath ~/.config/hypr/assets/wallpaper.png)" > ~/.config/hyprland-de/wallpaper.conf
+    if [ -f ./hyprland-de/wallpaper.conf ] && [ -f "$(cat ./hyprland-de/wallpaper.conf)" ]; then
+        cp ./hyprland-de/wallpaper.conf ~/.config/hyprland-de/
+    else
+        echo "$(realpath ~/.config/hypr/assets/wallpaper.png)" > ~/.config/hyprland-de/wallpaper.conf
+    fi
 fi
 
 cp -r ./scripts/ ~/.config/hyprland-de/

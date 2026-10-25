@@ -16,15 +16,45 @@ All changes live under `v0.56.0/dotfiles/` so they stay diffable against upstrea
   per-game window rules and autostart hooks under `hyprland/custom.d/`.
 - Quickshell, kitty, GTK, Qt and Kvantum updates for the Rosé Pine theme.
 
+### Installing
+
+```sh
+cd v0.56.0/dotfiles
+./setup.sh
+```
+
+`setup.sh` installs the file set of this fork: Hyprland (including `custom.d/`,
+`scheme/`, `script/`, `sounds/`), quickshell, matugen, kitty, GTK, Qt/Kvantum and the
+`hyprland-de` scripts, and points the gsettings themes at Bibata/Rosé Pine. It
+overwrites the files it manages, including `kitty.conf` and the GTK configs, and it no
+longer installs walker or wallust.
+
 ### Local prerequisites
 
 Paths are intentionally absolute for my machine. The setup also expects these
 external pieces, which are not stored in this repo:
 
-- the `RosePine-Custom` GTK theme under `~/.local/share/themes/`
+- the `RosePine-Custom` GTK theme under `~/.local/share/themes/`, whose
+  `gtk-3.0/assets` symlink targets `/usr/share/themes/rose-pine-gtk/assets`
 - `Bibata-Modern-Classic` cursors and `rose-pine-icons`
+- the `Lato` font
 - a wallpaper at `~/Pictures/Wallpapers/mountain.png`
 - `~/avatar.jpg` for the lock screen
+
+The `third-party/` tree is kept from upstream for reference only; this setup uses the
+icon, cursor and GTK themes installed by the packages above.
+
+### Tests
+
+```sh
+cd v0.56.0/dotfiles
+./tests/setup_test.sh
+```
+
+The test runs `setup.sh` against a throwaway `HOME` with stubbed `gsettings`,
+`systemctl`, `hyprctl` and `matugen`, then checks the installed file set, that
+`wallpaper.sh` finds its sibling `apply-rose-pine`, the gsettings values, and that a
+second run is safe.
 
 ### Updating from upstream
 

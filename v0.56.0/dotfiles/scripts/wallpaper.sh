@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+
 if [[ $# -ne 1 || ! -f "$1" ]]; then
     printf 'Usage: %s <existing wallpaper image>\n' "$0" >&2
     exit 1
@@ -22,10 +24,10 @@ wallpaper {
 }
 EOF
 
-"$HOME/.local/bin/apply-rose-pine"
+"$script_dir/apply-rose-pine"
 
 if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" && -z "${HLDE_NO_HYPRPAPER:-}" ]]; then
-    # Update the single existing daemon, rather than kill/relaunch it or start Walker.
+    # Update the single existing daemon instead of kill/relaunching it.
     hyprctl hyprpaper wallpaper ",$wallpaper,cover"
 fi
 printf 'Done! Rosé Pine colors preserved.\n'
