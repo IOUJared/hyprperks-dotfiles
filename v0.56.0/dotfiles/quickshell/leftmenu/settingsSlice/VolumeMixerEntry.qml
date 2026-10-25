@@ -26,22 +26,52 @@ Item {
 
     Image {
       property real size: 20
-      visible: source != "speaker"
+      // The desktop-entry model loads asynchronously; re-run the binding when it
+      // is populated so app names can resolve to their icons.
+      readonly property int entryCount: DesktopEntries.applications.values.length
+
+      function resolveIconName() {
+        const props = root.node.properties;
+
+        if (root.overrideIcon !== "")
+          return root.overrideIcon;
+
+        // Direct icon names first; PipeWire only sets application.icon-name for
+        // some clients, so fall back through the other identifying properties.
+        const direct = [
+          props["application.icon-name"],
+          props["application.id"],
+          props["application.process.binary"],
+          props["application.name"],
+          props["node.name"],
+        ];
+        for (const name of direct) {
+          if (name && Quickshell.hasThemeIcon(name))
+            return name;
+        }
+
+        // Match the stream against a desktop entry (e.g. "Zen" -> zen-browser).
+        for (const name of [props["application.id"], props["application.name"], props["node.name"]]) {
+          if (!name)
+            continue;
+          const entry = DesktopEntries.heuristicLookup(name);
+          if (entry && entry.icon && Quickshell.hasThemeIcon(entry.icon))
+            return entry.icon;
+        }
+
+        return "audio-speakers";
+      }
+
+      visible: source != ""
       Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
       sourceSize.width: size
       sourceSize.height: size
       width: size
       height: size
       source: {
-        let icon;
-        if (root.overrideIcon != "")
-          return Quickshell.iconPath(root.overrideIcon, "speaker");
-
-        icon = root.node.properties["application.icon-name"];
-        if (Quickshell.iconPath(icon, "speaker") !== "speaker")
-          return Quickshell.iconPath(icon, "speaker");
-        icon = root.node.properties["node.name"];
-        return Quickshell.iconPath(icon, "speaker");
+        // Referencing entryCount keeps this binding live while entries load.
+        void entryCount;
+        return Quickshell.iconPath(resolveIconName(), "audio-speakers");
       }
     }
 

@@ -1,4 +1,5 @@
 //@ pragma UseQApplication
+//@ pragma IconTheme rose-pine-icons
 //@ pragma IgnoreSystemSettings
 import "./config" as C
 import "./intro" as I

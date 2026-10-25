@@ -16,7 +16,8 @@ upstream.
   menu, and ordered session shutdown with `uwsm stop`.
 - Custom `hyprlock`/`hypridle` configs, monitor layout, workspace/bind set, and
   per-game window rules and autostart hooks under `hyprland/custom.d/`.
-- Quickshell, kitty, GTK, Qt and Kvantum updates for the Rosé Pine theme.
+- Quickshell, kitty, GTK, Qt and Kvantum updates for the Rosé Pine theme, with the
+  Quickshell icon theme pinned and per-app icons in the volume mixer.
 
 ### Installing
 
@@ -54,6 +55,14 @@ The test runs `setup.sh` against a throwaway `HOME` with stubbed `gsettings`,
 `systemctl`, `hyprctl` and `matugen`, then checks the installed file set, that
 `wallpaper.sh` finds its sibling `apply-rose-pine`, the gsettings values, and that a
 second run is safe.
+
+The icon test checks that Quickshell uses the Rosé Pine icon theme and that the volume
+mixer's fallback icon resolves:
+
+```sh
+cd v0.56.0/dotfiles
+./tests/quickshell_icon_test.sh
+```
 
 ### Updating from upstream
 

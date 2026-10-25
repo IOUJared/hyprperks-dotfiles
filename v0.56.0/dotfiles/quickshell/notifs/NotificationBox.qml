@@ -75,7 +75,7 @@ Item {
 
           IconImage {
             implicitSize: coverItem.height
-            source: Quickshell.iconPath(root.icon)
+            source: Quickshell.iconPath(root.icon, "dialog-information")
           }
         }
 
